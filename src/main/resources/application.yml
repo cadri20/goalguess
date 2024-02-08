@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.100.17:3306/goal_guess
+    username: root
+    password: cadri2024
+  jpa:
+    hibernate:
+      ddl-auto: validate
