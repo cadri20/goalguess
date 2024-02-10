@@ -9,4 +9,6 @@ import org.springframework.core.convert.converter.Converter;
 public interface TeamMapper extends Converter<Team, TeamDTO> {
     @Override
     TeamDTO convert(Team source);
+
+
 }
