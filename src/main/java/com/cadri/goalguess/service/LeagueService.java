@@ -78,6 +78,15 @@ public class LeagueService {
         return conversionService.convert(teamCreated, TeamDTO.class);
     }
 
+    public List<MatchdayDTO> getMatchdays(Long leagueId){
+        Optional<League> league = leagueRepository.findById(leagueId);
+        if(league.isEmpty()){
+            LOGGER.debug("Not exist league with the id {}", leagueId);
+            throw new RestException(HttpStatus.NOT_FOUND, "League not found");
+        }
+        return conversionService.convert(league.get().getMatchdays(), List.class);
+    }
+
     public MatchdayDTO createMatchday(Long leagueId, MatchdayRequestDTO matchday){
         Optional<League> league = leagueRepository.findById(leagueId);
         if(league.isEmpty()){

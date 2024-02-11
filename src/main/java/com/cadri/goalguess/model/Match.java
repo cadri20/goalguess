@@ -23,6 +23,8 @@ public class Match {
     @OneToOne
     private MatchResult result;
 
+
+
     public Match() {
     }
 }

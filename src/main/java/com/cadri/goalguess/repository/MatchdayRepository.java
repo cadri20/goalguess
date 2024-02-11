@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface MatchdayRepository extends JpaRepository<Matchday, Long> {
     Optional<Matchday> findTopByLeagueIdOrderByDateDesc(Long leagueId);
+
 }

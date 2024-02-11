@@ -1,8 +1,10 @@
 package com.cadri.goalguess.service;
 
 import com.cadri.goalguess.dto.MatchdayDTO;
+import com.cadri.goalguess.dto.MatchdayResultRequestDTO;
 import com.cadri.goalguess.exception.RestException;
 import com.cadri.goalguess.model.Matchday;
+import com.cadri.goalguess.model.MatchdayResult;
 import com.cadri.goalguess.repository.MatchdayRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,5 +32,16 @@ public class MatchdayService {
             throw new RestException(HttpStatus.NOT_FOUND, "Matchday not found");
         }
         return conversionService.convert(matchday, MatchdayDTO.class);
+    }
+
+    public MatchdayResult saveMatchdayResult(Long matchdayId, MatchdayResultRequestDTO matchdayResult){
+        Matchday matchday = matchdayRepository.findById(matchdayId).orElse(null);
+        if(matchday == null){
+            LOGGER.debug("Not exist matchday with the id {}", matchdayId);
+            throw new RestException(HttpStatus.NOT_FOUND, "Matchday not found");
+        }
+        MatchdayResult transformed = conversionService.convert(matchdayResult, MatchdayResult.class);
+        matchday.setMatchdayResult(transformed);
+        return matchdayRepository.save(matchday).getMatchdayResult();
     }
 }

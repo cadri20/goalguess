@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class Matchday {
     private String name;
 
     @FutureOrPresent
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     private LocalDate date;
 
@@ -39,6 +40,11 @@ public class Matchday {
     @JoinColumn(name = "matchday_id")
     @Cascade(CascadeType.ALL)
     private List<Match> matches;
+
+    @OneToOne
+    @JoinColumn(name = "matchday_result_id")
+    @Cascade(CascadeType.ALL)
+    private MatchdayResult matchdayResult;
 
     @OneToMany
     @JoinColumn(name = "matchday_id")

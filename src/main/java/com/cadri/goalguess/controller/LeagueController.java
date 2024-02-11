@@ -51,6 +51,11 @@ public class LeagueController {
         return leagueService.createTeam(leagueId, team);
     }
 
+    @GetMapping("/{leagueId}/matchdays")
+    public List<MatchdayDTO> getMatchdays(@PathVariable Long leagueId){
+        return leagueService.getMatchdays(leagueId);
+    }
+
     @PostMapping("/{leagueId}/matchdays")
     public MatchdayDTO createMatchday(@PathVariable Long leagueId, @RequestBody MatchdayRequestDTO matchday){
         return leagueService.createMatchday(leagueId, matchday);
@@ -60,4 +65,7 @@ public class LeagueController {
     public MatchdayDTO getNextMatchday(@PathVariable Long leagueId){
         return matchdayService.findNextMatchday(leagueId);
     }
+
+
+
 }
