@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class MatchResultDTO {
     private Long id;
-    private int homeTeamGoals;
-    private int awayTeamGoals;
+    private int homeGoals;
+    private int awayGoals;
     private boolean penalties;
     private TeamDTO winner;
 }

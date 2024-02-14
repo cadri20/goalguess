@@ -4,6 +4,7 @@ import com.cadri.goalguess.dto.MatchResultRequestDTO;
 import com.cadri.goalguess.exception.RestException;
 import com.cadri.goalguess.model.Match;
 import com.cadri.goalguess.model.MatchResult;
+import com.cadri.goalguess.model.Team;
 import com.cadri.goalguess.repository.MatchRepository;
 import com.cadri.goalguess.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class MatchResultRequestDTOMapper implements Converter<MatchResultRequest
         MatchResult matchResult = new MatchResult();
         matchResult.setHomeGoals(source.getHomeGoals());
         matchResult.setAwayGoals(source.getAwayGoals());
+        Optional<Team> winner = teamRepository.findByName(source.getWinner());
+        if(winner.isEmpty()) {
+            throw new RestException(HttpStatus.NOT_FOUND, "Winner team not found");
+        }else{
+            matchResult.setWinner(winner.get());
+        }
         Optional<Match> match = matchRepository.findById(source.getMatchId());
         if(match.isEmpty()) {
             throw new RestException(HttpStatus.NOT_FOUND, "Match not found");

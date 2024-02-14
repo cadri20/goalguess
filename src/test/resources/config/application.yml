@@ -5,5 +5,8 @@ spring:
     password: cadri2024
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+
 

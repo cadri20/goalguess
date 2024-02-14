@@ -21,8 +21,9 @@ public class MatchdayResult {
     @Getter(AccessLevel.NONE)
     private Matchday matchday;
 
-    @OneToMany
+    @OneToMany()
     @Cascade(CascadeType.ALL)
+    @JoinColumn(name = "matchday_result_id")
     private List<MatchResult> results;
 
 

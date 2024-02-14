@@ -30,7 +30,6 @@ public class MatchResult {
 
     @ManyToOne
     @JoinColumn(name = "match_id")
-
     private Match match;
 
 

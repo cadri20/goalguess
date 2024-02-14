@@ -4,6 +4,7 @@ import com.cadri.goalguess.dto.LeagueDTO;
 import com.cadri.goalguess.dto.MatchdayDTO;
 import com.cadri.goalguess.dto.MatchdayRequestDTO;
 import com.cadri.goalguess.dto.TeamDTO;
+import com.cadri.goalguess.model.League;
 import com.cadri.goalguess.model.Matchday;
 import com.cadri.goalguess.service.LeagueService;
 import com.cadri.goalguess.service.MatchdayService;
@@ -11,8 +12,10 @@ import com.cadri.goalguess.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
@@ -36,9 +39,9 @@ public class LeagueController {
     }
 
     @PostMapping
-    public LeagueDTO createLeague(@RequestBody LeagueDTO league){
+    public ResponseEntity<LeagueDTO> createLeague(@RequestBody LeagueDTO league){
         LOGGER.debug("League to save: {}", league);
-        return leagueService.save(league);
+        return ResponseEntity.status(201).body(leagueService.save(league));
     }
 
     @GetMapping("/{leagueId}/teams")
