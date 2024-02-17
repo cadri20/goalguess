@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,22 +61,16 @@ public class LeagueTests {
     void createTeams() throws Exception {
         long leagueId = 1L;
 
-        String teamJson = "{\"name\":\"Aniquiladores\"}";
-        String team2Json = "{\"name\":\"Ultimate Mostoles\"}";
+        String[] teams = {"Aniquiladores", "Ultimate Mostoles", "Porcinos", "El Barrio"};
 
-        mockMvc.perform(
-                post("/leagues/" + leagueId + "/teams")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(teamJson)
-        ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists());
-
-        mockMvc.perform(
-                post("/leagues/" + leagueId + "/teams")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(team2Json)
-        ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists());
+        for (String team : teams) {
+            mockMvc.perform(
+                    post("/leagues/" + leagueId + "/teams")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\":\"" + team + "\"}")
+            ).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").exists());
+        }
     }
 
     @Test
@@ -84,7 +79,8 @@ public class LeagueTests {
         long leagueId = 1L;
 
         String matchdayJson = "{\"name\":\"Jornada 1\", \"date\":\"2025-10-10\", \"matches\": [" +
-                "{\"homeTeam\": \"Aniquiladores\", \"awayTeam\": \"Ultimate Mostoles\"}" + "]}";
+                "{\"homeTeam\": \"Aniquiladores\", \"awayTeam\": \"Ultimate Mostoles\"}," +
+                "{\"homeTeam\": \"Porcinos\", \"awayTeam\": \"El Barrio\"}]}";
 
         mockMvc.perform(
                 post("/leagues/" + leagueId + "/matchdays")
@@ -98,7 +94,9 @@ public class LeagueTests {
     @Order(4)
     void createPrediction() throws Exception {
 
-        String predictionJson = "{\"predicter\": \"cadri\", \"results\": [{\"matchId\": 1, \"homeGoals\": 2, \"awayGoals\": 1, \"penalties\": false, \"winner\": \"Aniquiladores\"}]}";
+        String predictionJson = "{\"predicter\": \"cadri\", \"results\": [" +
+                "{\"matchId\": 1, \"homeGoals\": 2, \"awayGoals\": 1, \"penalties\": false, \"winner\": \"Aniquiladores\"}," +
+                "{\"matchId\": 2, \"homeGoals\": 1, \"awayGoals\": 1, \"penalties\": true, \"winner\": \"Porcinos\"}]}";
 
         mockMvc.perform(
                 post("/matchdays/1/predictions")
@@ -111,7 +109,9 @@ public class LeagueTests {
     @Test
     @Order(5)
     void createMatchResults() throws Exception {
-        String matchResultsJson = "{\"results\": [{\"matchId\": 1, \"homeGoals\": 2, \"awayGoals\": 1, \"penalties\": false, \"winner\": \"Aniquiladores\"}]}";
+        String matchResultsJson = "{\"results\": [" +
+                "{\"matchId\": 1, \"homeGoals\": 5, \"awayGoals\": 1, \"penalties\": false, \"winner\": \"Aniquiladores\"}," +
+                "{\"matchId\": 2, \"homeGoals\": 1, \"awayGoals\": 2, \"penalties\": false, \"winner\": \"El Barrio\"}]}";
 
         mockMvc.perform(
                 post("/matchdays/1/results")
@@ -119,6 +119,14 @@ public class LeagueTests {
                         .content(matchResultsJson)
         ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists());
+    }
+
+    @Test
+    @Order(5)
+    void getPredictionPoints() throws Exception {
+        mockMvc.perform(get("/predictions/1/points"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.points").value("62.5"));
     }
 
 }

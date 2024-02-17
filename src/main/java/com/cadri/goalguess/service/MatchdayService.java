@@ -25,10 +25,17 @@ public class MatchdayService {
 
     private ConversionService conversionService;
 
-    public MatchdayService(MatchdayRepository matchdayRepository, PredictionRepository predictionRepository,ConversionService conversionService) {
+    private PointService pointService;
+
+    public MatchdayService(MatchdayRepository matchdayRepository,
+                           PredictionRepository predictionRepository,
+                           ConversionService conversionService,
+                            PointService pointService
+    ) {
         this.matchdayRepository = matchdayRepository;
         this.conversionService = conversionService;
         this.predictionRepository = predictionRepository;
+        this.pointService = pointService;
     }
 
     public MatchdayDTO findNextMatchday(Long leagueId){
@@ -81,5 +88,20 @@ public class MatchdayService {
             throw new RestException(HttpStatus.NOT_FOUND, "Matchday not found");
         }
         return conversionService.convert(matchday.getPredictions(), List.class);
+    }
+
+    public double getPredictionPoints(Long predictionId){
+        Prediction prediction = predictionRepository.findById(predictionId).orElse(null);
+        if(prediction == null){
+            LOGGER.debug("Not exist prediction with the id {}", predictionId);
+            throw new RestException(HttpStatus.NOT_FOUND, "Prediction not found");
+        }
+
+        Matchday matchday = prediction.getMatchday();
+        MatchdayResult matchdayResult = matchday.getMatchdayResult();
+
+        return pointService.getPredictionPoints(prediction, matchdayResult);
+
+
     }
 }

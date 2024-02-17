@@ -33,6 +33,26 @@ public class MatchResult {
     private Match match;
 
 
+    //return a value between 0 and 1 depending on how close the prediction is to the actual result
+    public double compare(MatchResult prediction){
+        double points = 0;
+        if(this.homeGoals == prediction.homeGoals){
+            points += 0.25;
+        }
 
+        if(this.awayGoals == prediction.awayGoals){
+            points += 0.25;
+        }
 
+        if(this.penalties == prediction.penalties){
+            points += 0.25;
+        }
+
+        if(this.winner.equals(prediction.winner)){
+            points += 0.25;
+        }
+
+        return points;
+
+    }
 }

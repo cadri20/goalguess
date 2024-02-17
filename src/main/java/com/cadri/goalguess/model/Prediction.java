@@ -1,10 +1,8 @@
 package com.cadri.goalguess.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import java.util.List;
@@ -23,7 +21,8 @@ public class Prediction {
 
     @ManyToOne
     @JoinColumn(name = "matchday_id")
-    @Getter(AccessLevel.NONE)
+    @JsonIgnore
+    @ToString.Exclude
     private Matchday matchday;
 
 }

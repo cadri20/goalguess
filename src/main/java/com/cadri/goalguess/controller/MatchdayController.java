@@ -38,4 +38,5 @@ public class MatchdayController {
     public List<PredictionDTO> getPredictions(@PathVariable Long matchdayId) {
         return matchdayService.getPredictions(matchdayId);
     }
+
 }
